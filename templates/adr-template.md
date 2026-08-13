@@ -1,17 +1,55 @@
-# ADR-xxx: Title
+# ADR-NNN — <Decision Title>
 
 ## Status
 
-Draft
+PROPOSED
+
+<!--
+Allowed lifecycle values:
+
+PROPOSED
+ACCEPTED
+SUPERSEDED
+DEPRECATED
+REJECTED
+
+Do not rewrite the history of an ACCEPTED ADR to represent a later decision.
+
+If this decision is replaced:
+1. Create a new ADR.
+2. Mark this ADR as SUPERSEDED.
+3. Add the replacing ADR under "Superseded By".
+-->
+
+---
+
+## Date
+
+YYYY-MM-DD
+
+---
+
+## Decision Owners
+
+- <owner / decision maker>
+
+---
 
 ## Context
 
-What problem are we solving?
+Describe the situation that requires a decision.
 
-## Decision
+Include only the context needed to understand:
 
-What did we decide?
+- the problem;
+- relevant constraints;
+- why a decision is required now;
+- important existing architecture or product invariants.
 
-## Consequences
+Reference authoritative documentation instead of copying it.
 
-What changes because of this decision?
+Relevant sources:
+
+```text
+<path/to/relevant-document.md>
+<path/to/relevant-document.md>

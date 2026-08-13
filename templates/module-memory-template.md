@@ -1,17 +1,33 @@
-# Module Memory: Module Name
+# <Module / Domain Name> — Project Memory
 
 ## Purpose
 
-Describe the module purpose.
+This file records the current implementation state of <module/domain>.
 
-## Current State
+It exists to help developers and coding agents quickly understand:
 
-Describe what exists now.
+- what is currently implemented;
+- how the implementation is organized;
+- important implementation-specific constraints;
+- known limitations or issues;
+- what remains unfinished.
 
-## Decisions
+This file is project memory.
 
-Record important module-level decisions.
+It is NOT:
 
-## Known Issues
+- the product specification;
+- architecture authority;
+- a task history;
+- a chat transcript;
+- an ADR;
+- a replacement for source code or tests.
 
-Track risks, bugs, and follow-up work.
+Authoritative product, architecture, and engineering rules remain in their owning documents.
+
+---
+
+## Status
+
+```text
+NOT_STARTED
