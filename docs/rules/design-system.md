@@ -41,6 +41,19 @@ Define and reuse semantic tokens for:
 - Typography scale.
 Avoid one-off hard-coded values when a semantic token exists.
 
+Current foundation conventions preserve the accepted editorial direction:
+
+- Color roles use `--canvas`, `--surface`, `--surface-muted`, `--ink`,
+  `--muted`, `--line`, `--brand`, `--accent`, `--warm`, `--destructive`,
+  `--information`, and `--focus-ring`.
+- The visual language uses sharp controls/cards (`--radius-sharp` and
+  `--radius-control`) with strong border and offset-shadow treatment.
+- Spacing roles are `--space-page`, `--space-section`, `--space-card`, and
+  `--space-control`; use the existing Tailwind spacing scale when it maps to
+  the same established rhythm.
+- `--font-display` is reserved for page and section headings; body copy uses
+  `--font-body`.
+
 ## 5. Color
 Use semantic meaning rather than arbitrary color names in product logic.
 Do not rely on color alone for status. Pair color with text/icon/state.
@@ -54,6 +67,10 @@ dark
 system
 ```
 Reusable components must remain legible in light and dark modes. Avoid theme-specific one-off components.
+
+The application shell starts in `system` mode and lets the user cycle through
+system, dark, and light preferences. Persisting a preference is deferred until
+there is an established settings boundary.
 
 ## 7. Typography
 Use a restrained hierarchy:
@@ -139,6 +156,11 @@ DISABLED
 FAILED
 ```
 Do not create different visual meanings for the same status across modules.
+
+The shared status badge owns both the visible label and its treatment. Its
+current status vocabulary is `active`, `in-progress`, `upcoming`, `complete`,
+`paused`, `late`, `missed`, and `failed`; text remains visible so status is
+never communicated by color alone.
 
 ## 18. Empty states
 An empty state should explain:

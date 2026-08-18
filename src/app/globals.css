@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  /* Semantic color roles preserve the accepted editorial visual direction. */
+  --canvas: #ffd900;
+  --surface: #fffdf6;
+  --surface-muted: #f0e9d2;
+  --ink: #101010;
+  --muted: #514f48;
+  --line: #101010;
+  --brand: #e62f63;
+  --brand-strong: #bf1f4e;
+  --accent: #00bf88;
+  --success: #008b62;
+  --warm: #ff9f00;
+  --destructive: #ba2424;
+  --information: #1676d2;
+  --focus-ring: #1769e0;
+  --on-primary: #ffffff;
+  --on-accent: #101010;
+  --radius-sharp: 0px;
+  --radius-control: 0px;
+  --space-page: 1.25rem;
+  --space-section: 2.5rem;
+  --space-card: 1.25rem;
+  --space-control: 0.75rem;
+  --font-body: Arial, Helvetica, sans-serif;
+  --font-display: Arial Black, Arial, Helvetica, sans-serif;
+}
+
+.dark {
+  color-scheme: dark;
+  --canvas: #191919;
+  --surface: #252525;
+  --surface-muted: #353535;
+  --ink: #fffdf6;
+  --muted: #cbc4b3;
+  --line: #fffdf6;
+  --brand: #ff5481;
+  --brand-strong: #ff8eaa;
+  --accent: #1de0a6;
+  --success: #1de0a6;
+  --warm: #ffb21f;
+  --destructive: #ff7373;
+  --information: #65a8ff;
+  --focus-ring: #74b3ff;
+  --on-primary: #101010;
+  --on-accent: #101010;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--brand);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
