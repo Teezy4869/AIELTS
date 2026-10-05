@@ -1,67 +1,52 @@
-# AIELTS Together — Agent Operating Guide
+# AIELTS Together — Codex Operating Guide
 
 ## 1. Purpose
-This file is the repository-level operating guide for coding agents working on AIELTS Together.
+This file is the repository-level operating guide for Codex working on AIELTS Together.
 
 It exists to:
-- Orient the agent before repository work begins.
-- Route the agent to the correct source of truth.
+- Orient Codex before repository work begins.
+- Route to the correct source of truth.
 - Summarize project-wide invariants.
 - Define the expected engineering workflow.
 - Provide command and verification guidance.
 - Define when documentation should change.
-
-It is intentionally concise. It is **not** the authoritative product specification, architecture encyclopedia, database documentation, AI design document, coding-standard encyclopedia, project memory, task history, or detailed reusable procedure.
 
 ---
 
 ## 2. Project Snapshot
 AIELTS Together is a desktop-first web application for individual and small-group IELTS study.
 
-Supported skills: **Reading, Listening, Writing**. Speaking is outside the current scope.
+Supported skills: **Reading, Listening, Writing**. Speaking is outside current scope.
 
 Core group-learning flow:
 ```text
 Group → Goal → Study Plan → Assignment → Submission → Progress / XP
 ```
 
-The product also supports individual practice using the same learning content. Writing must work without AI. AI is limited to later Writing Evaluation.
-
-Detailed product scope belongs in `docs/product/`.
+Writing must work without AI. AI is limited to Writing Evaluation.
 
 ---
 
 ## 3. Technology Baseline
-```text
-Language              → TypeScript
-Runtime               → Node.js active LTS
-Web                   → Next.js App Router + React
-Architecture          → Modular monolith
-Database              → PostgreSQL
-Managed database      → Supabase PostgreSQL
-ORM                   → Drizzle ORM
-Migrations            → Drizzle Kit + version-controlled SQL
-Authentication        → Better Auth
-Sessions              → Database-backed secure cookie sessions
-Validation            → Zod
-Object storage        → Supabase Storage
-Hosting               → Vercel
-Scheduled trigger     → Vercel Cron
-UI                    → Tailwind CSS + project-owned shadcn/ui
-Unit/service tests    → Vitest
-Component tests       → React Testing Library + Vitest
-End-to-end tests      → Playwright
-Database tests        → PostgreSQL
-CI                    → GitHub Actions
-Package manager       → pnpm
-AI workstream         → Python ecosystem; exact stack deferred
-```
-
-Do not replace or duplicate these responsibilities without a concrete requirement. Significant changes require an explicit architecture decision.
+- **Language**: TypeScript
+- **Runtime**: Node.js active LTS
+- **Web**: Next.js App Router + React
+- **Architecture**: Modular monolith
+- **Database**: PostgreSQL (Supabase)
+- **ORM**: Drizzle ORM
+- **Migrations**: Drizzle Kit + version-controlled SQL
+- **Auth**: Better Auth + database-backed sessions
+- **Validation**: Zod
+- **Storage**: Supabase Storage
+- **Hosting**: Vercel
+- **UI**: Tailwind CSS + shadcn/ui
+- **Tests**: Vitest, React Testing Library, Playwright
+- **CI**: GitHub Actions
+- **Package manager**: pnpm
 
 ---
 
-## 4. Repository and Domain Structure
+## 4. Repository Structure
 ```text
 src/
 ├── app/          → routes, pages, layouts, server boundaries
@@ -79,113 +64,62 @@ docs/
 └── project-memory/   → current implementation state
 ```
 
-Primary technical domains: `Identity`, `Group & Planning`, `Assignment Orchestration`, `Learning Content`, `Submission & Assessment`, `Progress & Motivation`, `Communication`, `Operations`, `AI Writing`.
-
-Product modules do not need a one-to-one mapping to technical folders. Keep ownership explicit.
-
 ---
 
 ## 5. Source of Truth
 | Concern | Authority |
 |---|---|
-| Product identity / principles | `docs/product/project-overview.md` |
-| Functional module behavior / scope | `docs/product/modules.md` |
-| Milestones / development order | `docs/product/roadmap.md` |
-| System boundaries / runtime / technology | `docs/architecture/system-design.md` |
-| Persistent data / constraints / transactions / migrations | `docs/architecture/database-design.md` |
-| AI lifecycle / evaluation boundary | `docs/architecture/ai-architecture.md` |
-| Engineering workflow | `docs/rules/workflow.md` |
-| Implementation conventions | `docs/rules/coding-standards.md` |
-| Testing requirements | `docs/rules/testing.md` |
-| Security requirements | `docs/rules/security.md` |
-| UI rules | `docs/rules/design-system.md` |
-| Decision history | `docs/decisions/ADR-*.md` |
-| Current implementation state | `docs/project-memory/*.md` |
-
-Project memory never overrides product, architecture, security, or engineering rules. If authoritative documents conflict, identify the conflict instead of silently choosing one.
+| Product identity / principles | docs/product/project-overview.md |
+| Functional module behavior / scope | docs/product/modules.md |
+| Milestones / development order | docs/product/roadmap.md |
+| System boundaries / runtime | docs/architecture/system-design.md |
+| Persistent data / migrations | docs/architecture/database-design.md |
+| AI lifecycle / evaluation boundary | docs/architecture/ai-architecture.md |
+| Engineering workflow | docs/rules/workflow.md |
+| Implementation conventions | docs/rules/coding-standards.md |
+| Testing requirements | docs/rules/testing.md |
+| Security requirements | docs/rules/security.md |
+| Decision history | docs/decisions/ADR-*.md |
+| Current implementation state | docs/project-memory/*.md |
 
 ---
 
-## 6. Required Reading by Task
-| Task | Read |
-|---|---|
-| Normal engineering task | `workflow.md`, `coding-standards.md` |
-| Product behavior/scope | `modules.md`; also `project-overview.md` when principles/scope are affected |
-| Milestone/order change | `roadmap.md` |
-| Architecture/runtime/provider/infrastructure | `system-design.md` |
-| Database/schema/transaction/migration | `database-design.md` |
-| AI research/integration/runtime | `ai-architecture.md` |
-| Authentication/authorization/privacy/uploads/secrets | `security.md` |
-| UI/layout/theme/accessibility | `design-system.md` |
-| Test strategy/verification | `testing.md` |
-
-Also inspect the current implementation, nearby tests, and relevant project memory before adding parallel code or abstractions.
-
----
-
-## 7. Project-Wide Invariants
-Unless an explicit product or architecture decision changes them:
-
-1. Backend authorization is authoritative; frontend visibility is not authorization.
+## 6. Project-Wide Invariants
+1. Backend authorization is authoritative.
 2. Business rules must not live exclusively in UI, Server Actions, or Route Handlers.
-3. Server boundaries delegate reusable behavior to application/domain services.
-4. The browser must not directly access application PostgreSQL tables.
-5. Group Study Plans create shared group Assignments, not individualized assignments.
-6. Content progression is sequential, not adaptive.
-7. Detailed academic results and Writing content remain private.
-8. Writing works without AI.
-9. AI is limited to Writing Evaluation in current scope.
-10. AI failure never invalidates or rolls back a Writing Submission.
-11. AI output is untrusted input and must be contract-validated.
-12. Large media belongs in object storage, not PostgreSQL.
-13. Crawler output never writes directly into core application tables.
-14. Retryable work must avoid duplicate outcomes.
-15. Assignment creation and content-cursor advancement remain consistency-safe.
-16. XP/reward calculations are server-authoritative.
-17. Deadlines, late state, streaks, and quarter boundaries are server-authoritative.
-18. Do not silently expand product scope.
-19. Do not add infrastructure or major dependencies without demonstrated need.
+3. Writing works without AI.
+4. AI is limited to Writing Evaluation.
+5. AI failure never invalidates or rolls back a Writing Submission.
+6. AI output is untrusted input and must be contract-validated.
+7. Group Study Plans create shared group Assignments, not individualized assignments.
+8. Content progression is sequential, not adaptive.
+9. Detailed academic results and Writing content remain private.
+10. Large media belongs in object storage, not PostgreSQL.
+11. Retryable work must avoid duplicate outcomes.
+12. XP/reward calculations are server-authoritative.
+13. Deadlines, late state, streaks are server-authoritative.
 
 ---
 
-## 8. Working Rules
-For every implementation task:
-
-1. Understand the requested behavior and identify the owning domain.
-2. Read the relevant source-of-truth documents.
-3. Inspect existing code, tests, schemas, components, and project memory first.
-4. Identify security, privacy, transaction, idempotency, and time risks.
-5. Make the smallest correct change.
-6. Reuse established project patterns when appropriate.
-7. Keep domain logic out of presentation and transport boundaries.
-8. Validate untrusted runtime input before domain logic.
-9. Enforce protected authorization server-side.
-10. Preserve constraints and transaction boundaries.
-11. Avoid unrelated refactors, renames, formatting, or scope expansion.
-12. Avoid parallel auth, validation, storage, persistence, or state stacks.
-13. Add dependencies only for concrete unmet requirements.
-14. Run focused verification first, then broader checks as appropriate.
-15. Review the final diff for scope, architecture, security, data integrity, and maintainability.
-16. Update only documentation whose owned responsibility changed.
+## 7. Working Rules
+1. Read the relevant source-of-truth documents before changing an existing area.
+2. Make the smallest correct change; avoid unrelated refactors.
+3. Identify security, privacy, transaction, idempotency, and time risks.
+4. Keep domain logic out of presentation and transport boundaries.
+5. Validate untrusted runtime input before domain logic.
+6. Enforce protected authorization server-side.
+7. Run focused verification first, then broader checks.
+8. Update docs only when responsibility changed.
 
 Protected-operation flow:
 ```text
 resolve session → validate input → load resource → authorize
-→ execute application/domain operation → return safe result
-```
-
-Typical feature flow:
-```text
-domain rule/type → validation → persistence → application service
-→ server boundary → UI → tests → docs/memory when required
+→ execute domain operation → return safe result
 ```
 
 ---
 
-## 9. Commands and Verification
-Repository-defined scripts become authoritative after application bootstrap.
-
-Expected command surface:
+## 8. Commands
 ```bash
 pnpm install
 pnpm dev
@@ -196,53 +130,37 @@ pnpm test:e2e
 pnpm build
 ```
 
-Do not assume an expected command exists unless it is defined in the repository.
+---
 
-Verification rules:
-- Run the smallest relevant tests first.
-- Use real PostgreSQL when DB semantics, constraints, transactions, or `jsonb` matter.
-- Authorization changes require forbidden-path coverage.
-- Privacy boundaries should be verified at server/API level, not only UI level.
-- Retryable workflows require idempotency coverage where relevant.
-- Time-sensitive behavior uses deterministic timezone-aware tests.
-- Important bug fixes should add regression coverage when practical.
-- Run lint, typecheck, tests, build, and selected E2E checks as applicable.
+## 9. Available Skills
+Use the relevant repository skill when one of these workflows applies. Invoke it explicitly as `$skill-name` when needed:
 
-Detailed requirements live in `docs/rules/testing.md`.
+- $database-migration — Use when changing PostgreSQL schema, constraints, indexes, or Drizzle migrations.
+- $review-code — Use when reviewing changes, pull requests, or diffs.
+- $ai-experiment — Use when designing, running, or evaluating AI Writing research experiments.
+- $create-api — Use when adding HTTP Route Handlers or server-facing API boundaries.
 
 ---
 
-## 10. Documentation and Decision Rules
-| Change | Update |
-|---|---|
-| Product capability/rule | `docs/product/modules.md` |
-| Product identity/principle/scope | `docs/product/project-overview.md` |
-| Milestone scope/order | `docs/product/roadmap.md` |
-| System/runtime/provider/infrastructure | `docs/architecture/system-design.md` |
-| Persistent model/integrity/transaction architecture | `docs/architecture/database-design.md` |
-| AI lifecycle/contract/runtime boundary | `docs/architecture/ai-architecture.md` |
-| Engineering rule | relevant `docs/rules/*.md` |
-| Significant hard-to-reverse decision | create a new ADR |
-| Meaningful implementation state / known issue / durable lesson | `docs/project-memory/` |
+## 10. Definition of Done
+- [ ] Requested behavior is implemented.
+- [ ] Relevant product/architecture invariants are preserved.
+- [ ] Input validation exists at untrusted boundaries.
+- [ ] Authorization is server-side where required.
+- [ ] Private academic data remains protected.
+- [ ] Database integrity/transactions are correct.
+- [ ] Retryable effects are idempotent where required.
+- [ ] Relevant tests were added or updated.
+- [ ] Lint/typecheck/tests/build pass.
+- [ ] No unrelated changes in the diff.
+- [ ] Documentation updated only where responsibility changed.
 
-Do not update every documentation file after every task. Project memory is not a transcript or duplicate specification. Detailed reusable procedures belong in `.agents/skills/`, not in this file.
+<!-- BEGIN:nextjs-agent-rules -->
 
----
+# This is NOT the Next.js you know
 
-## 11. Definition of Done
-```text
-[ ] Requested behavior is implemented.
-[ ] Relevant product/architecture invariants are preserved.
-[ ] Untrusted input is validated where required.
-[ ] Authorization is server-side where required.
-[ ] Private academic data remains protected.
-[ ] Database integrity/transactions are correct.
-[ ] Retryable effects are idempotent where required.
-[ ] Relevant tests were added or updated.
-[ ] Applicable lint/typecheck/tests/build checks pass.
-[ ] No unrelated changes remain.
-[ ] Documentation changed only where responsibility changed.
-[ ] Project memory changed only for meaningful current state.
-```
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-If a task conflicts with an existing source of truth, treat it as a product or architecture decision rather than a local implementation detail.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
